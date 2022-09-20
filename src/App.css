@@ -1,4 +1,39 @@
-.App {
+body{
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  /*данное свойство сглаживает шрифты*/
+  /* -webkit-font-smoothing: antialiased;
+  font-family: 'Montserrat', sans-serif; */
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+}
+h1,h2,h3,h4,h5,h6,p{
+  padding: 0;
+  margin: 0;
+}
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+.container {
+  width: 80%;
+  max-width: 1400px;
+  height: 750px;
+
+  margin: 0px auto 0;
+}
+
+.container__btns {
+  width: 100%;
+  height: 54px;
+  background-color: red;
+}
+
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +70,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
