@@ -25,6 +25,8 @@ h1,h2,h3,h4,h5,h6,p{
   height: 750px;
 
   margin: 0px auto 0;
+
+  position: relative;
 }
 
 .container__btns {
@@ -33,6 +35,15 @@ h1,h2,h3,h4,h5,h6,p{
   background-color: red;
 }
 
+.testName:hover {
+  cursor: pointer;
+  color: #0e4380;
+}
+
+.table__title {
+  color: red;
+  margin: 0 auto;
+}
 /* .App {
   text-align: center;
 }
