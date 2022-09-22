@@ -40,9 +40,8 @@ h1,h2,h3,h4,h5,h6,p{
   color: #0e4380;
 }
 
-.table__title {
-  color: red;
-  margin: 0 auto;
+.ButtonsGroup__container {
+  display: flex;
 }
 /* .App {
   text-align: center;
