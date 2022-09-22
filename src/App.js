@@ -1,7 +1,8 @@
 // import logo from './logo.svg';
 import './App.css';
 import {ToDoList} from './components/list';
-import {AddPost, AddPostClass} from './components/addPost';
+import {AddPostClass} from './components/addPost';
+import {ChangePostClass} from './components/changePost';
 import React from 'react';
 
 
@@ -30,7 +31,9 @@ class AppClass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      // inMainPage: false,
+      // inAddPost: false,
+      // inChangePost: true,
       inMainPage: true,
       inAddPost: false,
       inChangePost: false,
@@ -39,13 +42,27 @@ class AppClass extends React.Component {
     this.stateChange = this.stateChange.bind(this);
     this.addItem = this.addItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+    this.changeItem = this.changeItem.bind(this);
     
     this.title = 'To Do List';
-    this.items = newElems;
+    this.items = props.itemsFromServer;
+    this.postToChangeIdx = null;
   }
 
-  stateChange(newState) {
+  stateChange(newState, postToChangeID) {
     this.setState(newState);
+
+    // console.log(postToChangeID);
+    let toChangeIndex = null;
+    postToChangeID = parseInt(postToChangeID);
+    this.items.filter((item, idx) => {
+      if (item.ID === postToChangeID) toChangeIndex = idx;
+    })
+
+    if (toChangeIndex !== null) {
+      this.postToChangeIdx = toChangeIndex;
+      // console.log(this.postToChangeIdx);
+    }
   }
 
   addItem(item) {
@@ -70,12 +87,34 @@ class AppClass extends React.Component {
     console.log(this.items);
   }
 
+  changeItem(newObj) {
+    let postIdx = null;
+
+    this.items.filter((item, idx) => {
+      if (item.ID === newObj.ID) {
+        postIdx = idx;
+      }
+    });
+
+    if (postIdx !== null) {
+      this.items[postIdx] = newObj;
+    }
+
+    console.log(this.items);
+  }
+
   render() {
     let currState;
 
     if (this.state.inMainPage) currState = <ToDoList title={this.title} onChange={this.stateChange} deleteItem={this.deleteItem} items={this.items}/>;
     // if (this.state.inAddPost) currState = <AddPost onChange={this.handleChange} items={newElems}/>;
     if (this.state.inAddPost) currState = <AddPostClass onChange={this.stateChange} addItem={this.addItem} items={this.items}/>;
+    if (this.state.inChangePost) currState = <ChangePostClass 
+        onChange={this.stateChange} 
+        changeItem={this.changeItem} 
+        items={this.items} 
+        postToChangeIdx={this.postToChangeIdx}>
+      </ChangePostClass>;
 
     return currState;
   }

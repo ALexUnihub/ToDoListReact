@@ -6,61 +6,60 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import React from 'react';
 // server handlers
-import {addPostOnServer} from './serverHandlers';
+import {changePostOnServer} from './serverHandlers';
 
-class AddPostClass extends React.Component {
+
+class ChangePostClass extends React.Component {
   constructor(props) {
     super(props);
 
-    this.title = 'Enter title';
-    this.text = 'Enter text';
-    this.items = props.items;
+    this.title = 'Edit title';
+    this.text = 'Edit text';
 
-    this.itemTitle = '';
-    this.itemText = '';
+    this.currItemTitle = props.items[props.postToChangeIdx].Title;
+    this.currItemText = props.items[props.postToChangeIdx].Text;
 
-    this.lastPostID = props.items[props.items.length - 1].ID
-
-    this.addItem = this.addItem.bind(this);
+    this.changeItem = this.changeItem.bind(this);
     this.changeItemTitle = this.changeItemTitle.bind(this);
     this.changeItemText = this.changeItemText.bind(this);
   }
 
-  addItem() {
+  changeItem() {
+    const postIndex = this.props.postToChangeIdx;
+
     let newObj = {
-      ID: this.lastPostID + 1,
-      Title: this.itemTitle,
-      Text: this.itemText,
+      ID: this.props.items[postIndex].ID,
+      Title: this.currItemTitle,
+      Text: this.currItemText,
       IsDone: false,
     }
 
-    addPostOnServer(newObj);
-    this.props.addItem(newObj);
+    changePostOnServer(newObj);
+    this.props.changeItem(newObj);
   }
 
-  changeItemTitle(event) {
-    this.itemTitle = event.target.value;
+  changeItemTitle(event) {    
+    this.currItemTitle = event.target.value;
   }
 
   changeItemText(event) {
-    // console.log(this.lastPostID);
-    this.itemText = event.target.value;
+    this.currItemText = event.target.value;
   }
 
   render() {
     return (
-    <div className='container'>
-      <CreateTitle title={this.title}></CreateTitle>
-      <CreateField className='CreateField__title' onChange={this.changeItemTitle}></CreateField>
-      <CreateTitle title={this.text}></CreateTitle>
-      <CreateField className='CreateField__text' onChange={this.changeItemText}></CreateField>
-      {/* <ButtonsGroup onChange={props.onChange}></ButtonsGroup> */}
-      <ButtonsGroupClass onChange={this.props.onChange} addItem={this.addItem} lastID={this.lastPostID}></ButtonsGroupClass>
-    </div>);
+      <div className='container'>
+        <CreateTitle title={this.title}></CreateTitle>
+        <CreateField className='CreateField__title' onChange={this.changeItemTitle} value={this.currItemTitle}></CreateField>
+        <CreateTitle title={this.text}></CreateTitle>
+        <CreateField className='CreateField__text' onChange={this.changeItemText} value={this.currItemText}></CreateField>
+        {/* <ButtonsGroup onChange={props.onChange}></ButtonsGroup> */}
+        <ButtonsGroupClass onChange={this.props.onChange} changeItem={this.changeItem} lastID={this.lastPostID}></ButtonsGroupClass>
+      </div>);
   }
 }
 
-export {AddPostClass};
+export {ChangePostClass};
 
 function CreateTitle(props) {
   return (
@@ -86,7 +85,7 @@ function CreateField(props) {
   return (
     <TextField sx={{
       width: '100%',
-    }} onChange={props.onChange}></TextField>
+    }} onChange={props.onChange} defaultValue={props.value}></TextField>
   );
 }
 
@@ -113,7 +112,8 @@ class ButtonsGroupClass extends React.Component {
       inAddPost: false,
       inChangePost: false,
     };
-    this.props.addItem();
+
+    this.props.changeItem();
     this.props.onChange(stateObj);
   }
 
@@ -125,7 +125,7 @@ class ButtonsGroupClass extends React.Component {
           right: 154,
           position: 'absolute',
           marginTop: 1,
-        }} onClick={this.onClickCreate}>Create post</Button>
+        }} onClick={this.onClickCreate}>Change post</Button>
       <Button variant='outlined' sx={{
           width: 150,
           right: 0,

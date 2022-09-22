@@ -12,8 +12,7 @@ import {deletePostOnServer} from './serverHandlers';
 import React from 'react';
 
 function ToDoList(props) {
-  // const reactComponents = createComponents(props.items);
-  const reactComponents = <CreateComponents elems={props.items} deleteItem={props.deleteItem}/>;
+  const reactComponents = <CreateComponents elems={props.items} deleteItem={props.deleteItem} onChange={props.onChange}/>;
 
   return (
     <div className='container'>
@@ -53,7 +52,7 @@ function CreateComponents(props) {
 
   const arr = props.elems.map((row, idx) => {
     return (
-    <TableRow key={row.Text} data-postid={row.ID}>
+    <TableRow key={row.ID} data-postid={row.ID}>
       <TableCell style={{ width: 50 }} component="th" scope="row">
         {idx + 1}
       </TableCell>
@@ -64,7 +63,8 @@ function CreateComponents(props) {
         {row.Text}
       </TableCell>
       <TableCell style={{ width: 52 }}>
-        <Button style={{ width: 44 }}>Edit</Button>
+        {/* <Button style={{ width: 44 }} onChange={props.onChange}>Edit</Button> */}
+        <EditBtnClass onChange={props.onChange}></EditBtnClass>
       </TableCell>
       <TableCell style={{ width: 52 }}>
         <DeleteBtnClass deleteItem={props.deleteItem}/>
@@ -73,6 +73,32 @@ function CreateComponents(props) {
   });
 
   return arr;
+}
+
+class EditBtnClass extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(event) {
+    const postID = event.target.closest('tr').dataset.postid;
+    let stateObj = {
+      inMainPage: false,
+      inAddPost: false,
+      inChangePost: true,
+    };
+
+    this.props.onChange(stateObj, postID);
+  }
+
+  render() {
+
+    return (
+      <Button style={{ width: 44 }} onClick={this.handleClick}>Edit</Button>
+    );
+  }
 }
 
 class DeleteBtnClass extends React.Component {

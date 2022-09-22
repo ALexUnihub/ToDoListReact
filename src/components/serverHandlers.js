@@ -16,4 +16,18 @@ async function addPostOnServer(post) {
   });
 }
 
-export {deletePostOnServer, addPostOnServer};
+async function changePostOnServer(changedPost) {
+  console.log('async change');
+  const postForm = {
+    Title: changedPost.Title,
+    Text: changedPost.Text,
+    IsDone: changedPost.IsDone,
+  };
+
+  let response = await fetch(`http://localhost:8080/api/post/${changedPost.ID}`, {
+    method: 'POST',
+    body: JSON.stringify(postForm),
+  })
+}
+
+export {deletePostOnServer, addPostOnServer, changePostOnServer};
